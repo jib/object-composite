@@ -8,6 +8,7 @@ my $Class       = 'Object::Composite';
 my $RegMeth     = 'register';
 my $AccMeth     = 'mk_accessors';
 my $TestClass   = 'My::Test';
+my $CompMeth    = '$My::Test::COMPOSITE_METHOD';
 
 use_ok( $Class );
 can_ok( $Class, $_ ) for $RegMeth, $AccMeth;
@@ -53,7 +54,7 @@ can_ok( $Class, $_ ) for $RegMeth, $AccMeth;
 
     my $meth    = 'meth2';
     my $called  = 0;
-    ok( $obj->$RegMeth( qr/^meth/, sub { $called++; return @_ } ),
+    ok( $obj->$RegMeth( qr/^meth/, sub { $called=eval"$CompMeth"; return @_ } ),
                                 "   Method '$meth' registered" );
     can_ok( $obj,               $meth );
     
@@ -63,6 +64,7 @@ can_ok( $Class, $_ ) for $RegMeth, $AccMeth;
         is_deeply( \@res, [$obj, $$],
                                 "       Returns expeced values" );
         ok( $called,            "       Caller flag toggled" );
+        is( $called, $meth,     "       Right method name stored: '$called'" );
     }
     
     ### regiser another regex, this time matching more precisely.

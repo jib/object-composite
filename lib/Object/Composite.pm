@@ -151,6 +151,9 @@ sub AUTOLOAD {
     $meth       =~ s/.+:://;
 
     my $sub     = $self->can( $meth );
+
+    no strict 'refs';
+    local ${"$class\::COMPOSITE_METHOD"} = $meth;
     
     ### dipsatch if we found it
     ### no match? croak with the standard perl error
@@ -172,6 +175,14 @@ sub ___debug {
     
     Carp::carp($msg);
 }
+
+=head1 GLOBAL VARIABLES
+
+=head2 $COMPOSITE_METHOD
+
+If a method call gets dispatched by a matching regex, the variable
+C<$COMPOSITE_METHOD> will be set in C<the objects class>, analogous to
+the C<$AUTOLOAD> variable for C<AUTOLOAD> methods.
 
 =head1 SEE ALSO
 
