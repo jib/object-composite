@@ -7,7 +7,7 @@ use base 'Class::Accessor';
 use vars qw[$VERSION $DEBUG $AUTOLOAD];
 
 $DEBUG      = 0;
-$VERSION    = '0.01';
+$VERSION    = '0.01_01';
 
 my %Cache;
 sub ___get_cache { return \%Cache };
